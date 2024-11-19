@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "Download Manager",
+    "version": "1.0",
+
+    "description": "Download Manager",
+    "icons": {
+        "48": "icons/beast-48.png"
+    },
+
+    "background": {
+        "scripts": ["scripts/background.js"],
+        "persistent": true
+    },
+
+    "permissions": [
+        "downloads",
+        "downloads.open",
+        "activeTab"
+    ],
+
+    "browser_action": {
+        "default_icon": "icons/beasts-48.png",
+        "default_title": "Download Test",
+        "default_popup": "popup/default_popup.html"
+    }
+}
