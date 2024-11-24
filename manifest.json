@@ -9,14 +9,21 @@
     },
 
     "background": {
-        "scripts": ["scripts/background.js"],
+        "scripts": [
+            "scripts/Network.js", 
+            "scripts/Download.js", 
+            "scripts/sleep.js", 
+            "scripts/main.js",
+            "scripts/default_script.js"
+    ],
         "persistent": true
     },
 
     "permissions": [
         "downloads",
         "downloads.open",
-        "activeTab"
+        "activeTab",
+        "storage"
     ],
 
     "browser_action": {
