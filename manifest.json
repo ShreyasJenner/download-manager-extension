@@ -10,25 +10,20 @@
 
     "background": {
         "scripts": [
-            "scripts/Network.js", 
-            "scripts/Download.js", 
-            "scripts/sleep.js", 
-            "scripts/main.js",
-            "scripts/default_script.js"
+            "download_manager/download_manager.js"
     ],
         "persistent": true
     },
 
     "permissions": [
-        "downloads",
-        "downloads.open",
         "activeTab",
+        "downloads",
         "storage"
     ],
 
     "browser_action": {
         "default_icon": "icons/beasts-48.png",
         "default_title": "Download Test",
-        "default_popup": "popup/default_popup.html"
+        "default_popup": "download_manager/download_manager.html"
     }
 }
