@@ -1,0 +1,24 @@
+.item-container {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.item-name {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.item-button {
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+}
+
+.item-button:hover {
+    color: #4caf50;
+}
