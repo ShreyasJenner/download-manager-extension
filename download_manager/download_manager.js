@@ -5,7 +5,6 @@ browser.downloads.onCreated.addListener( async (downloaditem) => {
     let currObj = await getDownloadList();
     let currArr = currObj.ongoing_list;
     
-    console.log(currArr);
     // if array does not exists then local storage should be updated and downloadHandler should be run
     if(currArr == undefined || currArr == []) {
         currArr = [];
@@ -16,6 +15,31 @@ browser.downloads.onCreated.addListener( async (downloaditem) => {
         // only perform local storage updation
         currArr.push(downloaditem);
         await browser.storage.local.set({[key]: currArr});
+    } 
+})
+
+
+/* Activate when a download state is changed */
+browser.downloads.onChanged.addListener( async (delta) => {
+    const key = "ongoing_list";
+    
+    /* Check for delta state being interrupted or complete */
+    if(delta.state && (delta.state.current === "interrupted" || delta.state.current === "complete")) {
+
+        let ongoing_list = await getDownloadList();
+        let new_ongoing_list = {ongoing_list: []};
+
+        // iterate through the items in list and dont add the interrupted item
+        ongoing_list.ongoing_list.forEach(item => {
+            if(item.id != delta.id) {
+                new_ongoing_list.ongoing_list.push(item);
+            }
+        })
+
+        console.log(new_ongoing_list);
+
+        // replace the array in storage with the new array
+        await browser.storage.local.set({[key]: new_ongoing_list.ongoing_list});
     }
 })
 
@@ -40,7 +64,7 @@ async function showDownloadList() {
     Container.innerHTML = '';
 
     // check if downloads are ongoing before creating html content
-    if(ongoing_list.ongoing_list === undefined) {
+    if(ongoing_list.ongoing_list === undefined || ongoing_list.ongoing_list.length === 0) {
         Container.innerHTML = '<p>No downloads ongoing</p>';
     } else {
         // for loop to create the button list 
@@ -131,16 +155,13 @@ async function cancelDownload(id, index) {
 
     // cancel the download
     let cancelling = browser.downloads.cancel(id);
-    console.log(cancelling);
 
     // remove  the item from the array in local storage
     let ongoing_list = await getDownloadList();
-    console.log(ongoing_list.ongoing_list);
     ongoing_list.ongoing_list.splice(index, 1);
     
 
     // replace with new array in local storage
-    console.log("Cancel"+ongoing_list);
     await browser.storage.local.set({[key]: ongoing_list.ongoing_list});
 
 }
@@ -202,17 +223,7 @@ async function downloadHandler() {
     setTimeout(downloadHandler, 3000);
 }
 
-/* Function to check network connectivity */
+/* Function to query browser to check network connectivity */
 async function checkNetwork() {
-    try {
-        // ping 8.8.8.8 for network connectivity
-        const res = await fetch('8.8.8.8', {method: 'HEAD'});
-        if(res.ok) {
-            return true;
-        } else {
-            return false;
-        }
-    } catch(err) {
-        return false;
-    }
+    return navigator.onLine.toString;
 }
